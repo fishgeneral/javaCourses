@@ -1760,14 +1760,6 @@ ping
 
 
 
-
-
-
-
-
-
-
-
 ## 用户管理
 
 ### 用户管理
@@ -1776,7 +1768,117 @@ ping
 ​				所有的操作系统都有用户的机制。当我们使用操作系统的时候，需要以一个用户的身份登陆。
 ​				在Windows中常见的是自己设置的用户名称或者Administrator，在Linux学习中，大部分人使用root用户。
 ​				每一个进程也需要以一个用户的身份运行，用户是用来限制使用者或者进程可以访问的资源的。
-​			
+
+
+
+**查看登陆的用户**
+
+```html
+				(1):whoami
+​					显示当前用户
+​				(2):who
+​					显示有哪些用户已经登陆系统
+​				(3):w
+​					显示有哪些用户已经登陆系统并且在干什么
+​					Linux中有一个不成文的约定：命令越长显示的内容越少，命令越短，显示的内容越多
+```
+
+
+
+**创建用户**​
+
+```html
+useradd命令用于创建一个用户
+​				格式 : useradd userName
+
+[root@root ~]# useradd  xiaozuanfeng
+```
+
+
+
+**修改用户密码**
+
+```html
+passwd userName
+
+[root@xiaozuanfeng ~]# passwd wangxiaoka
+Changing password for user wangxiaoka.
+New password:
+BAD PASSWORD: The password is shorter than 8 characters
+Retype new password:
+passwd: all authentication tokens updated successfully.
+[root@xiaozuanfeng ~]#
+```
+
+
+
+
+
+```html
+useradd命令会执行以下操作
+​		
+​			(1): 在/etc/passwd文件中添加用户信息
+​			(2): 如果使用passwd命令创建密码，则将密码保存在/etc/shadow中
+​			(3): 为用户建立一个新的家目录/home/userName
+​			(4): 将/etc/skel中的文件复制到用户的家目录中
+​					/etc/skel中的文件都是用户初始化相关的一些文件
+​					.bash_logout : 用户退出所需要执行的命令可以写入该文件
+​					.bashrc : 用户登陆时所需要执行的命令可以写入该文件
+​			(5): 建立一个与用户名相同的组，新建用户默认属于这个同名组
+```
+
+
+
+```html
+	useradd的常见参数
+​		· -d 指定用户家目录
+​		· -s 指定用户登陆shell
+​		· -u 指定用户的ID
+​		· -g 指定用户所属主组
+​		· -G 指定用户所属附属组，最多31个，用逗号分割
+​		也可以通过修改/etc/passwd方式实现，但是不建议
+```
+
+
+
+**删除用户**
+
+```html
+删除用户的命令有两个
+	· userdel userName (保留用户家目录)
+	· userdel -r userName (同时删除用户的家目录)
+```
+
+
+
+
+
+**修改用户信息**
+
+```html
+	命令usermod用来修改用户信息
+	格式 ： usermod 参数 userName
+		参数 ： 
+			· -l 新用户名
+			· -u 新用户ID
+			· -d 用户家目录
+			· -g 用户所属主组
+			· -G 用户所属附属组
+			· -L 锁定用户使其不能登陆
+			· -U 解除锁定
+```
+
+
+
+
+
+
+
+
+
+
+
+
 ​			用户的特征
 ​				(1):每一个用户都有一个唯一的UserID,简称UID.操作系统实际使用的是用户的ID，而非用户名。
 ​				(2):用户ID为32位,从0开始，但是为了兼容老系统，用户ID限制在60000一下。
@@ -1821,58 +1923,10 @@ ping
 ​					该文件是用户的组文件，所有的组信息都保存在该文件中。
 ​					格式：每一行都是一个组信息，每一行中以冒号作为分割符
 ​						组名称:组密码:组ID:组用户
-​			
-​			查看登陆的用户
-​				(1):whoami
-​					显示当前用户
-​				(2):who
-​					显示有哪些用户已经登陆系统
-​				(3):w
-​					显示有哪些用户已经登陆系统并且在干什么
-​				Linux中有一个不成文的约定：命令越长显示的内容越少，命令越短，显示的内容越多
-​			
-​			创建用户
-​				useradd命令用于创建一个用户
-​				格式 : useradd userName
-
-useradd xiaozuanfeng
-				
-
-​		这个命令会执行以下操作
 ​		
-​			(1): 在/etc/passwd文件中添加用户信息
-​			(2): 如果使用passwd命令创建密码，则将密码保存在/etc/shadow中
-​			(3): 为用户建立一个新的家目录/home/userName
-​			(4): 将/etc/skel中的文件复制到用户的家目录中
-​					/etc/skel中的文件都是用户初始化相关的一些文件
-​					.bash_logout : 用户退出所需要执行的命令可以写入该文件
-​					.bashrc : 用户登陆时所需要执行的命令可以写入该文件
-​			(5): 建立一个与用户名相同的组，新建用户默认属于这个同名组
 ​	
-​	useradd的常见参数
-​		· -d 指定用户家目录
-​		· -s 指定用户登陆shell
-​		· -u 指定用户的ID
-​		· -g 指定用户所属主组
-​		· -G 指定用户所属附属组，最多31个，用逗号分割
-​		也可以通过修改/etc/passwd方式实现，但是不建议
-​	
-​	修改用户信息
-​		命令usermod用来修改用户信息
-​		格式 ： usermod 参数 userName
-​			参数 ： 
-​				· -l 新用户名
-​				· -u 新用户ID
-​				· -d 用户家目录
-​				· -g 用户所属主组
-​				· -G 用户所属附属组
-​				· -L 锁定用户使其不能登陆
-​				· -U 解除锁定
-​	
-​	删除用户
-​		删除用户的命令有两个
-​		· userdel userName (保留用户家目录)
-​		· userdel -r userName (同时删除用户的家目录)
+
+
 ​	
 ​	组的概念
 ​		几乎所有的操作系统都有组的概念，通过组，可以将用户进行分类，管理。
