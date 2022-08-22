@@ -2222,7 +2222,7 @@ service crond restart 重启任务调度
 
 **任务调度快速入门**
 
-1. 设置任务调度文件 /etc/crontab
+1. 给任务调度文件添加可执行权限 /etc/crontab
 2. 设置个人任务调度，执行crontab -e 命令
 3. 输入任务到调度文件，例如 ： \*/1 \****  ls - l  /etc  >>  /tmp/to.txt（每一分钟都执行一次ls -l /etc  >> /tmp/to.txt命令）
 
